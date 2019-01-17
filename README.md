@@ -1,8 +1,7 @@
-docker-postfix
+postfix-relayhost
 ==============
 
-run postfix with smtp authentication (sasldb) in a docker container.
-TLS and OpenDKIM support are optional.
+run postfix with smtp relay.
 
 ## Requirement
 + Docker 1.0
@@ -11,33 +10,24 @@ TLS and OpenDKIM support are optional.
 1. Build image
 
 	```bash
-	$ sudo docker pull catatnight/postfix
+	$ docker pull nanasess/postfix-relayhost
 	```
 
 ## Usage
-1. Create postfix container with smtp authentication
+1. Create postfix container with relayhost
+
+relay_password
+```
+[relayhost.example.com]:587	user@relayhost.example.com:password
+```
 
 	```bash
-	$ sudo docker run -p 25:25 \
-			-e maildomain=mail.example.com -e smtp_user=user:pwd \
-			--name postfix -d catatnight/postfix
-	# Set multiple user credentials: -e smtp_user=user1:pwd1,user2:pwd2,...,userN:pwdN
-	```
-2. Enable OpenDKIM: save your domain key ```.private``` in ```/path/to/domainkeys```
+	$ docker run -p 1025:25 \
+			-e maildomain=mail.example.com \
+            -e relayhost="[relayhost.example.com]:587" \
+            -v "`pwd`/relay_password:/etc/postfix/relay_password" \
+			--name postfix-relayhost -d nanasess/postfix-relayhost
 
-	```bash
-	$ sudo docker run -p 25:25 \
-			-e maildomain=mail.example.com -e smtp_user=user:pwd \
-			-v /path/to/domainkeys:/etc/opendkim/domainkeys \
-			--name postfix -d catatnight/postfix
-	```
-3. Enable TLS(587): save your SSL certificates ```.key``` and ```.crt``` to  ```/path/to/certs```
-
-	```bash
-	$ sudo docker run -p 587:587 \
-			-e maildomain=mail.example.com -e smtp_user=user:pwd \
-			-v /path/to/certs:/etc/postfix/certs \
-			--name postfix -d catatnight/postfix
 	```
 
 ## Note
@@ -48,4 +38,5 @@ TLS and OpenDKIM support are optional.
 ## Reference
 + [Postfix SASL Howto](http://www.postfix.org/SASL_README.html)
 + [How To Install and Configure DKIM with Postfix on Debian Wheezy](https://www.digitalocean.com/community/articles/how-to-install-and-configure-dkim-with-postfix-on-debian-wheezy)
++ https://github.com/catatnight/docker-postfix
 + TBD
