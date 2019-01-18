@@ -1,7 +1,7 @@
 postfix-relayhost
 ==============
 
-run postfix with smtp relay.
+Run postfix with smtp relay.
 
 ## Requirement
 + Docker 1.0
@@ -9,26 +9,28 @@ run postfix with smtp relay.
 ## Installation
 1. Build image
 
-	```bash
-	$ docker pull nanasess/postfix-relayhost
-	```
+```bash
+$ docker pull nanasess/postfix-relayhost
+```
 
 ## Usage
 1. Create postfix container with relayhost
 
-relay_password
+Save your **relay_password** to /path/to/relay_password
+
 ```
 [relayhost.example.com]:587	user@relayhost.example.com:password
 ```
 
-	```bash
-	$ docker run -p 1025:25 \
-			-e maildomain=mail.example.com \
-            -e relayhost="[relayhost.example.com]:587" \
-            -v "`pwd`/relay_password:/etc/postfix/relay_password" \
-			--name postfix-relayhost -d nanasess/postfix-relayhost
+Execute the `docker run` command.
 
-	```
+```bash
+$ docker run -p 1025:25 \
+		-e maildomain=mail.example.com \
+		-e relayhost="[relayhost.example.com]:587" \
+		-v "/path/to/relay_password:/etc/postfix/relay_password" \
+		--name postfix-relayhost -d nanasess/postfix-relayhost
+```
 
 ## Note
 + Login credential should be set to (`username@mail.example.com`, `password`) in Smtp Client
