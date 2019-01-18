@@ -29,6 +29,11 @@ chmod +x /opt/postfix.sh
 postconf -e myhostname=$maildomain
 postconf -F '*/*/chroot = n'
 
+# Add dockerhost
+$mynetworks=${mynetworks:="172.17.0.0/24 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128"}
+
+postconf -e "mynetworks=$mynetworks"
+
 ############
 # SASL SUPPORT FOR CLIENTS
 # The following options set parameters needed by Postfix to enable
