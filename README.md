@@ -26,6 +26,7 @@ $ docker pull nanasess/postfix-relayhost
 
 	```bash
 	$ docker run -p 1025:25 \
+		-e mynetworks="172.17.0.0/24 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128"
 		-e maildomain=mail.example.com \
 		-e relayhost="[relayhost.example.com]:587" \
 		-v "/path/to/relay_password:/etc/postfix/relay_password" \
